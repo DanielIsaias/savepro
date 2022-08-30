@@ -1,2 +1,8 @@
 1.-To be able to run the program with different options from the terminal.
+	-all :listar todo los programas instalados de una manera estructura y con las opcion de mover hacia abajo
+	      con en 'Enter'
+	-update :Actualizar la lista de lo programas instalados para poder mejorar la velocidad cuando los queramos consultar
+	
+	-fav : poder ver los programas mas utilizados
 
+	
