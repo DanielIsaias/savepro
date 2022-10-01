@@ -2,13 +2,11 @@ import subprocess as sub
 import os
 
 #With this file we store the record of installed Programs
-import list_of_programms
+#import list_of_programms
 
 
 
 
-#The list can be replaced by a file to store permanently the programs we have
-repo_programs = [] 
 
 
 
@@ -24,40 +22,39 @@ def record_install(repo, nameOfApp):
     
 
     #If every thing is ok, we can store the program
-     
-    infoCommand = 'whatis {} | cut -c 24-'.format(nameOfApp) 
-    appInfo = sub.run(infoCommand, capture_output=True, text=True, shell=True) 
-
-
-    repo_programs.append([nameOfApp,appInfo.stdout]) 
+   
 
 
 
-#Nos falta agregar aque lista se aguardara
+
+
 #mejor usaremos una funcion para guardar el programa junto con su descripsion
 def add_program(name): 
+    infoCommand = f"whatis {name} | cut -c 20-"
+
+    #Esta variable almacena la salida del comando
+    appInfo = sub.run(infoCommand, capture_output=True, text=True, shell=True)
     
-    #infoCommand = 
+    #La string que agregaremos al archivo 
+    lineToAppend = name + appInfo.stdout
 
-    list_of_programms.repo_programs.append(name)
-
-
-
-
-#Nos muestra una lista de los progrmas instalados 
-#La idea es que nos lo muestre en un tabla de manera ordenada
-def list_terminal_apps():
-    for i in range(len(repo_programs)):
-        print(repo_programs[i]) 
+    add_to_file('list_of_programms.txt',lineToAppend) 
 
 
 
-answer = input("Enter program name:")
-repo = input("repo:") 
-record_install(repo, answer)
+
+#vamos a usar la palabra "with" para trabajar con nuestro archivo de python
+#crearemos una funcion donde se hace todo el proceso de abrir y almacenar info en el archivo
+#tenemos que poner el texto de agregaremos y el archivo .txt
+def add_to_file(nameFile, text):
+    with open(nameFile, 'a') as file:
+        file.write(f"{text}")
 
 
-list_terminal_apps() 
+
+
+#line for test the functions
+add_program("inxi") 
 
 
 
