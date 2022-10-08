@@ -53,9 +53,48 @@ def add_to_file(nameFile, text):
 
 
 
-#line for test the functions
-add_program("inxi") 
+#Esta funcion nos permite verifcar si el programa que queremos guardar esta instalado correctamente
+#en caso  de que no, nos muestra un mensaje y se sale de la ejecucion.
+def is_installed(name):
+    command = f"dpkg -s {name}"
 
+    appInfo = sub.run(command, capture_output=True, text=True, shell=True)
+
+    appInfo_text = appInfo.stdout.split("\n")
+
+    if "Status: install ok installed" in appInfo_text:
+        return True
+    else:
+        return "This program is not installed."
+
+    return False
+
+
+
+#Esta funcion nos muestra el contenido de un archivo
+def list_programs(nameFile):
+    with open(nameFile, 'r', encoding = 'utf-8') as file:
+        for i in file:
+            print(i, end = '')
+
+
+#Esta funcion se usara para eliminar la linea de texto que contenga
+#el nombre del programa que queremos eliminar
+def del_from_file(nameFile, text):
+    with open(nameFile, 'r') as oldFile:
+        with open("temp.txt", 'w') as newFile:
+            for line in oldFile:
+                if text not in line.strip('\n'):
+                    newFile.write(f"{line}")
+    #Creamos un nuevo archivo y luego cambiamos el nombre 
+    os.replace("temp.txt", nameFile)
+
+
+
+
+
+
+#line for test the functions
 
 
 
