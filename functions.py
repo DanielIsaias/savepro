@@ -1,3 +1,6 @@
+import subprocess as sub
+import os
+
 
 def record_install(repo, nameOfApp):
     #The type of instalation is from where we install the program
