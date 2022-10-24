@@ -15,33 +15,43 @@ import sys
 #especificando el origen del programa, si viene de los repositorios si vienede los paquetes snap. 
 
 
+#Guardar las opciones en una lista, hace que escriba menos codigo
+arguments = [ ["-s","--save"], ["-d", "--del"], ["-r","--repo"],["-l", "--list" ] ]
+
 
 
 
 if len(sys.argv) == 4: #cantidad de argumentos de terminal
-    op1,op2  = sys.argv[1],sys.argv[2] #options
-    pr = sys.argv[3] #program 
+    op1 = sys.argv[1]  #option
+    op2 = sys.argv[2]  #option
+    pr  = sys.argv[3]  #program 
 
-    if (op1 == "-s" or op1 == "--save") and (op2 == "-r" or op2 == "--repo"):
-        if fun.add_program("repo_programs.txt", pr) == True:
-            print("Program save.")
+    if (op1 in arguments[0]) and (op2 in arguments[2]): #add a program to the selected list-------
+        if not fun.is_installed(pr):
+            print("The program in not installed.")
+            exit() 
+        elif fun.in_the_file("repo_programs.txt", pr):
+            print("The program is in the file.")
             exit()
         else:
-            print("Lo siento, El programa no existe.") 
+            #si no se cumple ninguna de las condiciones anteriores, el programa se guardara
+            fun.add_to_file("repo_programs.txt", pr, True)
+            print("The program is saved.") 
             exit()
-    elif (op1 == "-d" or op1 == "--del") and (op2 == "-r" or op2 == "--repo"):
-        fun.del_from_file("repo_programs.txt",pr)
-        print("Program removed.") 
-        exit() 
-    else:
-        print("-Error: parametros no reconocidos.") 
-        exit()
+    elif (op1 in arguments[1]) and (op2 in arguments[2]): #delete a program from the list---------
+        if (not fun.in_the_file("repo_programs.txt", pr) ):
+            print("The program you want to remove is not in the file.")
+            exit()
+        else:
+            fun.del_from_file("repo_programs.txt", pr) 
+            print("The program is removed from your list.")
+            exit()
 
 elif len(sys.argv) == 3: 
     op1 = sys.argv[1] #option
     pr  = sys.argv[2] #name of the origin of the program
     
-    if (op1 == "-l" or op1 == "--list") and  pr == "repo":
+    if (op1 in arguments[3]) and (pr == "repo"): #list the programs in the specified archive--------
         fun.list_programms("repo_programs.txt") 
         exit() 
     else:
