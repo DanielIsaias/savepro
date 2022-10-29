@@ -2,33 +2,19 @@ import subprocess as sub
 import os
 
 
-def record_install(repo, nameOfApp):
-    #The type of instalation is from where we install the program
-    #Using dictionaris we can avoid use ifElse
-    type_of_installation = {'-repo': "sudo apt install "}
-
-    install = type_of_installation[repo] + nameOfApp
-
-    os.system(install)
-    #la mejor practica es obtener la salida del comando para poder manejar los errores que surgan
-
-
-    #If every thing is ok, we can store the program 
 
 
 
-
-
-
-
-#mejor usaremos una funcion para guardar el programa junto con su descripsion
-def add_program(name):
-    #Check if the program is installed.
-    if not is_installed(name):
+def add_program(nameFile, name):
+#El programa que querramos aguardar tiene que cumplir con las siguientes condiciones
+#para poder ser guardado en el archivo correspondiente.
+    if is_installed(name) and (not in_the_file(nameFile, name)): 
+        add_to_file(nameFile, name, True)
+        return True
+    else:
         return False
 
-    add_to_file('list_of_programms.txt', name, True) 
-
+        
 
 
 
@@ -46,9 +32,6 @@ def add_to_file(nameFile, text, lineBreak=False):
 
 
 
-
-
-
 #Esta funcion nos permite verifcar si el programa que queremos guardar esta instalado correctamente
 #en caso  de que no, nos muestra un mensaje y se sale de la ejecucion.
 def is_installed(name):
@@ -60,11 +43,21 @@ def is_installed(name):
 
     if "Status: install ok installed" in appInfo_text:
         return True
+    else:
+        return False
 
-    return False
 
+#La funcion verificara que el programa que querramos agregar NO exista en el archivo y
+#de esta menera evitamos que se duplique el nombre.
+def in_the_file(nameFile, name): 
+    with open(nameFile, 'r') as file_txt:
+        lines = file_txt.readlines() 
+        lines = [i.strip('\n') for i in lines]
 
-
+        if name in lines:
+            return True
+        else:
+            return False
 
 
 
@@ -72,13 +65,11 @@ def is_installed(name):
 
 #Esta funcion nos muestra el contenido de un archivo
 def list_programms(nameFile):
-    with open(nameFile, 'r', encoding = 'utf-8') as file:
+    with open(nameFile, "r") as file_txt:
         num = 0 #variable que sirve para contar
-        for i in file:
+        for i in file_txt:
             num += 1
             print(f"{num}.-{i}", end = '')
-
-
 
 
 
@@ -98,8 +89,9 @@ def del_from_file(nameFile, text):
 
 
 
-
-
+#add_program("repo_programs.txt", "inxi")
+#list_programms("repo_programs.txt")
+#del_from_file("repo_programs.txt", "inxi")
 
 
 
